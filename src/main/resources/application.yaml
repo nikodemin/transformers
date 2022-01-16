@@ -4,6 +4,12 @@ logging:
   level:
     root: info
 spring:
+  thymeleaf:
+    cache: false
+  devtools:
+    restart:
+      additional-paths:
+        - static/built/*
   data:
     rest:
       basePath: api
