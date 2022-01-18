@@ -40,4 +40,48 @@ VALUES
 
 insert into inspection (service_date, description, transformer_id, transport_id)
 VALUES
-    (now() - interval '')
+    (now() - interval '70 years', 'basic check', 1, 1),
+    (now() - interval '69 years', 'basic check', 1, 2);
+
+insert into battle_field (name, terrain)
+VALUES
+    ('wasteland', 'DESERT'),
+    ('wonderland', 'PLAIN');
+
+insert into operation (name, start_date, end_date, enemy, battle_field_id)
+VALUES
+    ('battle 1', now() - interval '60 years', now() - interval '59 years', 'chickens', 1);
+
+insert into operation_transformer (operation_id, transformer_id)
+VALUES
+    (1, 1),
+    (1, 2);
+
+insert into transport_operation (transport_id, operation_id)
+VALUES
+    (1, 1);
+
+insert into weapon (name, type, caliber, rate_of_fire, range_of_fire)
+VALUES
+    ('sniper rifle', 'rifle', 'MG50', 10, 1000),
+    ('shotgun', 'shotgun', '30', 20, 70);
+
+insert into energon (capacity_left, type, kkal, weight)
+VALUES
+    (300, 'DARK', 30, 3),
+    (430, 'BRIGHT', 44, 4);
+
+
+insert into position (longitude, latitude, weapon_id, energon_id, battle_field_id, transformer_id, squad)
+VALUES
+    (34.5, 452, 1, 1, 2, 1, 'GROUND'),
+    (45.5, 32, 2, 2, 2, 2, 'AIR');
+
+INSERT INTO equipment (position_id, name, type, quantity, take_date)
+VALUES
+    (1, 'medkit', 'other', 2, now() - interval '60 years'),
+    (1, 'ammo', 'other', 40, now() - interval '60 years'),
+    (2, 'medkit', 'other', 4, now() - interval '60 years'),
+    (2, 'ammo', 'other', 30, now() - interval '60 years');
+
+

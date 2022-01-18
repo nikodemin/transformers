@@ -5,5 +5,5 @@ public enum TransformerPost {
     ADMIRAL,
     LIEUTENANT,
     COLONEL,
-    MAJOR;
+    MAJOR
 }

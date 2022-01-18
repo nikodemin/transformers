@@ -13,8 +13,7 @@ CREATE TABLE battle_field
 (
     id      bigint GENERATED ALWAYS AS IDENTITY,
     name    varchar(50) NOT NULL,
-    terrain varchar(50) NOT NULL,
-    squads  varchar(50) NOT NULL
+    terrain varchar(50) NOT NULL
 )
 ;
 
