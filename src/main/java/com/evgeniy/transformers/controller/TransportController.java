@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -17,6 +18,12 @@ public class TransportController {
     @DeleteMapping("/transports")
     public ResponseEntity<Void> deleteByIds(@RequestParam List<Long> ids) {
         repo.deleteByIdIn(ids);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/transports/addOperation")
+    public ResponseEntity<Void> addTransformer(@RequestParam Long operationId, @RequestParam Long transportId) {
+        repo.addOperation(transportId, operationId);
         return ResponseEntity.ok().build();
     }
 }
