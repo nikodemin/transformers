@@ -4,8 +4,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import java.util.List;
 
@@ -16,8 +16,7 @@ import java.util.List;
 public class Base extends AbstractEntity {
     private String name;
     private Location location;
-    @OneToMany
-    @JoinColumn(name = "id")
+    @OneToMany(mappedBy = "base", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Transformer> transformers;
 }
 
