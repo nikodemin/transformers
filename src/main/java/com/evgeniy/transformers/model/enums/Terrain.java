@@ -4,5 +4,5 @@ public enum Terrain {
     DESERT,
     PLAIN,
     TUNDRA,
-    SAVANNAH;
+    SAVANNAH
 }
