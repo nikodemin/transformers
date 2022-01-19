@@ -1,8 +1,10 @@
+import moment from "moment";
+
 export interface Transformer {
     id: number
     name: string
-    dateOfBuild: string | Date
-    hiringDate: string | Date
+    dateOfBuild: string | Date | moment.Moment
+    hiringDate: string | Date | moment.Moment
     post: TransformerPost
     height: number
     weight: number

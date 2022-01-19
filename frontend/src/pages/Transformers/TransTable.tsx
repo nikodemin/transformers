@@ -1,6 +1,7 @@
 import React, {FC, memo} from "react";
 import {Table} from "antd";
 import {Transformer} from "../../client/types";
+import moment from "moment";
 
 const columns = [
     {
@@ -14,7 +15,7 @@ const columns = [
     {
         title: "Date of build",
         dataIndex: "dateOfBuild",
-        render: (dateOfBuild: string) => <span>{new Date(dateOfBuild).toTimeString()}</span>,
+        render: (dateOfBuild: string) => <span>{moment(dateOfBuild).format("YYYY/MM/DD")}</span>,
     },
     {
         title: "Height",
@@ -27,6 +28,10 @@ const columns = [
     {
         title: "Base id",
         dataIndex: "baseId",
+    },
+    {
+        title: "Post",
+        dataIndex: "post",
     },
 ];
 
@@ -41,16 +46,16 @@ export const TransTable: FC<Props> = memo(({transformers, setSelectedTrans, hand
     return (
         <Table
             onRow={(record, rowIndex) => {
-                const {id, name, baseId, height, weight, hiringDate, post, dateOfBuild} = record;
+                const {id, name, baseId, height, weight, post} = record;
                 return {
                     onClick: event => handleUpdate({
                         id,
-                        dateOfBuild,
+                        dateOfBuild: moment(record.dateOfBuild),
                         name,
                         baseId,
                         height,
                         weight,
-                        hiringDate,
+                        hiringDate: moment(record.hiringDate),
                         post
                     }), // click row
                 };

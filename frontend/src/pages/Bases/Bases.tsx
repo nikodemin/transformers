@@ -22,7 +22,6 @@ const columns = [
 export const Bases: FC = memo(() => {
     const {bases} = useAppSelector(state => state.app)
     const dispatch = useDispatch();
-    const [form] = Form.useForm();
     const [base, setBase] = useState<null | Partial<Base>>(null);
     const [selectedBases, setSelectedBases] = useState<number[]>([])
 
@@ -33,13 +32,7 @@ export const Bases: FC = memo(() => {
         }
     }
     const closeModal = () => setBase(null);
-    const submit = (values: {
-        name: string, latitude: number
-        longitude: number
-    }) => {
-        const {latitude, name, longitude} = values;
-        dispatch(createBase({name, location: {latitude, longitude}}))
-    };
+
 
     useEffect(() => {
         dispatch(getBases());
@@ -55,32 +48,18 @@ export const Bases: FC = memo(() => {
     return (
         <>
             <ButtonsPanel createLabel={"Create base"} onCreate={onCreate} onDelete={onDeleteBases} />
-            <Modal title='Base' visible={!!base} onCancel={closeModal} okText='Submit'
-                   onOk={() => {
-                       form
-                           .validateFields()
-                           .then(values => {
-                               form.resetFields();
-                               submit(values);
-                               closeModal();
-                           })
-                           .catch(info => {
-                               console.log("Validate Failed:", info);
-                           });
-                   }}>
-                <Form form={form}>
-                    <Form.Item label='Name' name='name'>
-                        <Input />
-                    </Form.Item>
-                    <Form.Item label='Latitude' name='latitude'>
-                        <InputNumber />
-                    </Form.Item>
-                    <Form.Item label='Longitude' name='longitude'>
-                        <InputNumber />
-                    </Form.Item>
-                </Form>
-            </Modal>
+            {base && <BaseModal base={base} closeModal={closeModal} />}
             <Table
+                onRow={(record, rowIndex) => {
+                    const {id, name, location} = record;
+                    return {
+                        onClick: event => setBase({
+                            id,
+                            name,
+                            location,
+                        }), // click row
+                    };
+                }}
                 rowSelection={{
                     type: "checkbox",
                     onChange: ((selectedRowKeys, selectedRows) => setSelectedBases(selectedRows.map(row => row.id)))
@@ -91,3 +70,46 @@ export const Bases: FC = memo(() => {
         </>
     );
 });
+
+const BaseModal: FC<{ closeModal: () => void; base: Partial<Base> }> = memo(({closeModal, base}) => {
+    const [form] = Form.useForm();
+    const dispatch = useDispatch();
+    const submit = (values: {
+        name: string, latitude: number
+        longitude: number
+    }) => {
+        const {latitude, name, longitude} = values;
+        dispatch(createBase({name, location: {latitude, longitude}}))
+    };
+    return (
+        <Modal title='Base' visible={true} onCancel={closeModal} okText='Submit'
+               onOk={() => {
+                   form
+                       .validateFields()
+                       .then(values => {
+                           form.resetFields();
+                           submit(values);
+                           closeModal();
+                       })
+                       .catch(info => {
+                           console.log("Validate Failed:", info);
+                       });
+               }}>
+            <Form form={form} initialValues={base ? {
+                name: base.name,
+                latitude: base.location?.latitude,
+                longitude: base.location?.longitude
+            } : undefined}>
+                <Form.Item label='Name' name='name' rules={[{required: true}]}>
+                    <Input />
+                </Form.Item>
+                <Form.Item label='Latitude' name='latitude' rules={[{required: true}]}>
+                    <InputNumber />
+                </Form.Item>
+                <Form.Item label='Longitude' name='longitude' rules={[{required: true}]}>
+                    <InputNumber />
+                </Form.Item>
+            </Form>
+        </Modal>
+    )
+})

@@ -1,9 +1,9 @@
 import React, {FC, memo, useEffect, useState} from "react";
 import {useAppSelector} from "../redux/store";
-import {DatePicker, Form, Input, Modal, Select, Table} from "antd";
-import {Modification, Upgrade} from "../client/types";
+import {DatePicker, Form, Input, Modal, Table} from "antd";
+import {Inspection, Upgrade} from "../client/types";
 import {useDispatch} from "react-redux";
-import {createUpgrade, deleteUpgrades, getInspections, getModifications, getUpgrades} from "../redux/thunk";
+import {createUpgrade, getInspections} from "../redux/thunk";
 import {appActions} from "../redux/action-creators";
 import {ButtonsPanel} from "../components/buttonsPanel";
 import moment from "moment";
@@ -35,17 +35,17 @@ const columns = [
 export const Inspections: FC = memo(() => {
     const {inspections} = useAppSelector(state => state.app);
     const [form] = Form.useForm();
-    const [upgrade, setUpgrade] = useState<null | Partial<Upgrade>>(null);
-    const [selectedUpgrades, setSelectedUpgrades] = useState<number[]>([])
+    const [inspection, setInspection] = useState<null | Partial<Inspection>>(null);
+    const [selectedInspections, setSelectedInspections] = useState<number[]>([])
     const dispatch = useDispatch();
 
-    const onCreate = () => setUpgrade({});
+    const onCreate = () => setInspection({});
     const onDeleteUpgrades = () => {
-        if (selectedUpgrades.length) {
-            dispatch(deleteUpgrades(selectedUpgrades))
+        if (selectedInspections.length) {
+            //dispatch(deleteUpgrades(selectedUpgrades))
         }
     }
-    const closeModal = () => setUpgrade(null);
+    const closeModal = () => setInspection(null);
     const submit = (values: Upgrade) => {
         dispatch(createUpgrade(values))
     };
@@ -64,7 +64,7 @@ export const Inspections: FC = memo(() => {
     return (
         <>
             <ButtonsPanel createLabel={"Create inspection"} onCreate={onCreate} onDelete={onDeleteUpgrades} />
-            <Modal title='Base' visible={!!upgrade} onCancel={closeModal} okText='Submit'
+            <Modal title='Base' visible={!!inspection} onCancel={closeModal} okText='Submit'
                    onOk={() => {
                        form
                            .validateFields()
@@ -92,7 +92,7 @@ export const Inspections: FC = memo(() => {
             <Table
                 rowSelection={{
                     type: "checkbox",
-                    onChange: ((selectedRowKeys, selectedRows) => setSelectedUpgrades(selectedRows.map(row => row.id)))
+                    onChange: ((selectedRowKeys, selectedRows) => setSelectedInspections(selectedRows.map(row => row.id)))
                 }}
                 columns={columns}
                 dataSource={inspections.map(inspection => ({...inspection, key: inspection.id}))}

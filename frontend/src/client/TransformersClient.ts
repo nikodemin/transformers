@@ -24,6 +24,6 @@ export const transformersClient = {
         return axiosInstance.post(baseUrl, transformer)
     },
     updateTransformer(transformer: Transformer) {
-        return axiosInstance.put(baseUrl, transformer)
+        return axiosInstance.put(`${baseUrl}/${transformer.id}`, transformer)
     }
 }

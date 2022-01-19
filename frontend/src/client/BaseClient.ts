@@ -263,8 +263,8 @@ export const upgradesClient = {
     updateUpgrade(data: Upgrade) {
         return axiosInstance.put("/upgrades", data)
     },
-    addModificationToUpgrade(data: { upgradeId: number, modificationId: number }) {
-        return axiosInstance.post("/upgrades/addModification", data)
+    addModificationToUpgrade(params: { upgradeId: number, modificationId: number }) {
+        return axiosInstance.post("/upgrades/addModification", {}, {params})
     },
 }
 

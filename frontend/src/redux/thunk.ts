@@ -1,12 +1,12 @@
 import {AppThunk} from "./store";
 import {appActions} from "./action-creators";
 import {transformersClient} from "../client/TransformersClient";
-import {Base, BattleField, Inspection, Modification, Transformer, Upgrade} from "../client/types";
+import {Base, BattleField, Inspection, Modification, Operation, Transformer, Upgrade} from "../client/types";
 import {
     baseClient,
     battleFieldsClient,
     inspectionsClient,
-    modificationsClient,
+    modificationsClient, operationsClient,
     upgradesClient
 } from "../client/BaseClient";
 
@@ -175,7 +175,7 @@ export const getUpgrades = (): AppThunk => async dispatch => {
     }
 }
 
-export const createUpgrade = (params: Omit<Upgrade, "id">): AppThunk => async dispatch => {
+export const createUpgrade = (params: Omit<Upgrade, "id" | "modifications">): AppThunk => async dispatch => {
     dispatch(appActions.setFetching(true));
     try {
         await upgradesClient.addUpgrade(params);
@@ -192,6 +192,19 @@ export const updateUpgrade = (params: Upgrade): AppThunk => async dispatch => {
     dispatch(appActions.setFetching(true));
     try {
         await upgradesClient.updateUpgrade(params);
+        const data: Upgrade[] = await upgradesClient.getUpgrades()
+        dispatch(appActions.setUpgrades(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"));
+    } finally {
+        dispatch(appActions.setFetching(false));
+    }
+}
+
+export const addModificationToUpgrade = (params: {upgradeId: number, modificationId: number}): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        await upgradesClient.addModificationToUpgrade(params);
         const data: Upgrade[] = await upgradesClient.getUpgrades()
         dispatch(appActions.setUpgrades(data))
     } catch (e) {
@@ -270,6 +283,18 @@ export const getInspections = (): AppThunk => async dispatch => {
     try {
         const data: Inspection[] = await inspectionsClient.getInspections()
         dispatch(appActions.setInspections(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"))
+    } finally {
+        dispatch(appActions.setFetching(false))
+    }
+}
+
+export const getOperations = (): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        const data: Operation[] = await operationsClient.getOperations()
+        dispatch(appActions.setOperations(data))
     } catch (e) {
         dispatch(appActions.setError("Some error has occurred!"))
     } finally {
