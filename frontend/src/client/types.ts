@@ -61,7 +61,7 @@ export interface Equipment {
     name: string;
     type: string;
     quantity: number;
-    takeDate: number;
+    takeDate: string | Date | moment.Moment;
     positionId: number;
 }
 
@@ -69,7 +69,7 @@ export interface Injury {
     id: number;
     type: string
     description: string
-    date: string | Date
+    date: string | Date | moment.Moment
     transformerId: number
 }
 
@@ -100,8 +100,8 @@ export interface Modification {
 export interface Operation {
     id: number
     name: string
-    startDate: string | Date
-    endDate: string | Date
+    startDate: string | Date | moment.Moment
+    endDate: string | Date | moment.Moment
     enemy: string
     battleFieldId: number
     transformers: Transformer[]

@@ -1,13 +1,23 @@
 import {AppThunk} from "./store";
 import {appActions} from "./action-creators";
 import {transformersClient} from "../client/TransformersClient";
-import {Base, BattleField, Inspection, Modification, Operation, Transformer, Transport, Upgrade} from "../client/types";
+import {
+    Base,
+    BattleField, Energon, Equipment, Injury,
+    Inspection,
+    Modification,
+    Operation, Position,
+    Transformer,
+    Transport,
+    Upgrade,
+    Weapon
+} from "../client/types";
 import {
     baseClient,
-    battleFieldsClient,
+    battleFieldsClient, energonClient, equipmentClient, injuryClient,
     inspectionsClient,
-    modificationsClient, operationsClient, transportClient,
-    upgradesClient
+    modificationsClient, operationsClient, positionsClient, transportClient,
+    upgradesClient, weaponsClient
 } from "../client/BaseClient";
 
 export const getTransformers = (): AppThunk => async dispatch => {
@@ -294,7 +304,7 @@ export const updateModification = (params: Modification): AppThunk => async disp
 export const deleteModifications = (ids: number[]): AppThunk => async dispatch => {
     dispatch(appActions.setFetching(true));
     try {
-        await upgradesClient.deleteUpgradesByIdIn(ids);
+        await modificationsClient.deleteModificationsByIdIn(ids);
         const data: Modification[] = await modificationsClient.getModifications()
         dispatch(appActions.setModifications(data))
     } catch (e) {
@@ -328,6 +338,45 @@ export const getOperations = (): AppThunk => async dispatch => {
     }
 }
 
+export const deleteOperations = (ids: number[]): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        await operationsClient.deleteOperationsByIdIn(ids);
+        const data: Operation[] = await operationsClient.getOperations()
+        dispatch(appActions.setOperations(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"));
+    } finally {
+        dispatch(appActions.setFetching(false));
+    }
+}
+
+export const createOperation = (params: Omit<Operation, "id">): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        await operationsClient.addOperation(params);
+        const data: Operation[] = await operationsClient.getOperations()
+        dispatch(appActions.setOperations(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"));
+    } finally {
+        dispatch(appActions.setFetching(false));
+    }
+}
+
+export const updateOperation = (params: Operation): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        await operationsClient.updateOperation(params);
+        const data: Operation[] = await operationsClient.getOperations()
+        dispatch(appActions.setOperations(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"));
+    } finally {
+        dispatch(appActions.setFetching(false));
+    }
+}
+
 export const getTransport = (): AppThunk => async dispatch => {
     dispatch(appActions.setFetching(true));
     try {
@@ -337,5 +386,299 @@ export const getTransport = (): AppThunk => async dispatch => {
         dispatch(appActions.setError("Some error has occurred!"))
     } finally {
         dispatch(appActions.setFetching(false))
+    }
+}
+
+export const deleteTransport = (ids: number[]): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        await transportClient.deleteTransportByIdIn(ids);
+        const data: Transport[] = await transportClient.getTransport()
+        dispatch(appActions.setTransport(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"));
+    } finally {
+        dispatch(appActions.setFetching(false));
+    }
+}
+
+export const createTransport = (params: Omit<Transport, "id">): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        await transportClient.addTransport(params);
+        const data: Transport[] = await transportClient.getTransport()
+        dispatch(appActions.setTransport(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"));
+    } finally {
+        dispatch(appActions.setFetching(false));
+    }
+}
+
+export const updateTransport = (params: Transport): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        await transportClient.updateTransport(params);
+        const data: Transport[] = await transportClient.getTransport()
+        dispatch(appActions.setTransport(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"));
+    } finally {
+        dispatch(appActions.setFetching(false));
+    }
+}
+
+export const getWeapons = (): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        const data: Weapon[] = await weaponsClient.getWeapons()
+        dispatch(appActions.setWeapons(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"))
+    } finally {
+        dispatch(appActions.setFetching(false))
+    }
+}
+
+export const deleteWeapons = (ids: number[]): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        await weaponsClient.deleteWeaponsByIdIn(ids);
+        const data: Weapon[] = await weaponsClient.getWeapons()
+        dispatch(appActions.setWeapons(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"));
+    } finally {
+        dispatch(appActions.setFetching(false));
+    }
+}
+
+export const createWeapon = (params: Omit<Weapon, "id">): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        await weaponsClient.addWeapon(params);
+        const data: Weapon[] = await weaponsClient.getWeapons()
+        dispatch(appActions.setWeapons(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"));
+    } finally {
+        dispatch(appActions.setFetching(false));
+    }
+}
+
+export const updateWeapon = (params: Weapon): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        await weaponsClient.updateWeapon(params);
+        const data: Weapon[] = await weaponsClient.getWeapons()
+        dispatch(appActions.setWeapons(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"));
+    } finally {
+        dispatch(appActions.setFetching(false));
+    }
+}
+
+export const getEnergon = (): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        const data: Energon[] = await energonClient.getEnergon()
+        dispatch(appActions.setEnergon(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"))
+    } finally {
+        dispatch(appActions.setFetching(false))
+    }
+}
+
+export const deleteEnergon = (ids: number[]): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        await energonClient.deleteEnergonByIdIn(ids);
+        const data: Energon[] = await energonClient.getEnergon()
+        dispatch(appActions.setEnergon(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"));
+    } finally {
+        dispatch(appActions.setFetching(false));
+    }
+}
+
+export const createEnergon = (params: Omit<Energon, "id">): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        await energonClient.addEnergon(params);
+        const data: Energon[] = await energonClient.getEnergon()
+        dispatch(appActions.setEnergon(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"));
+    } finally {
+        dispatch(appActions.setFetching(false));
+    }
+}
+
+export const updateEnergon = (params: Energon): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        await energonClient.updateEnergon(params);
+        const data: Energon[] = await energonClient.getEnergon()
+        dispatch(appActions.setEnergon(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"));
+    } finally {
+        dispatch(appActions.setFetching(false));
+    }
+}
+
+export const getEquipment = (): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        const data: Equipment[] = await equipmentClient.getEquipment()
+        dispatch(appActions.setEquipment(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"))
+    } finally {
+        dispatch(appActions.setFetching(false))
+    }
+}
+
+export const deleteEquipment = (ids: number[]): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        await equipmentClient.deleteEquipment(ids);
+        const data: Equipment[] = await equipmentClient.getEquipment()
+        dispatch(appActions.setEquipment(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"));
+    } finally {
+        dispatch(appActions.setFetching(false));
+    }
+}
+
+export const createEquipment = (params: Omit<Equipment, "id">): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        await equipmentClient.addEquipment(params);
+        const data: Equipment[] = await equipmentClient.getEquipment()
+        dispatch(appActions.setEquipment(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"));
+    } finally {
+        dispatch(appActions.setFetching(false));
+    }
+}
+
+export const updateEquipment = (params: Equipment): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        await equipmentClient.updateEquipment(params);
+        const data: Equipment[] = await equipmentClient.getEquipment()
+        dispatch(appActions.setEquipment(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"));
+    } finally {
+        dispatch(appActions.setFetching(false));
+    }
+}
+
+export const getInjury = (): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        const data: Injury[] = await injuryClient.getInjuries()
+        dispatch(appActions.setInjury(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"))
+    } finally {
+        dispatch(appActions.setFetching(false))
+    }
+}
+
+export const deleteInjury = (ids: number[]): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        await injuryClient.deleteInjuriesByIdIn(ids);
+        const data: Injury[] = await injuryClient.getInjuries()
+        dispatch(appActions.setInjury(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"));
+    } finally {
+        dispatch(appActions.setFetching(false));
+    }
+}
+
+export const createInjury = (params: Omit<Injury, "id">): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        await injuryClient.addInjury(params);
+        const data: Injury[] = await injuryClient.getInjuries()
+        dispatch(appActions.setInjury(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"));
+    } finally {
+        dispatch(appActions.setFetching(false));
+    }
+}
+
+export const updateInjury = (params: Injury): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        await injuryClient.updateInjury(params);
+        const data: Injury[] = await injuryClient.getInjuries()
+        dispatch(appActions.setInjury(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"));
+    } finally {
+        dispatch(appActions.setFetching(false));
+    }
+}
+
+export const getPositions = (): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        const data: Position[] = await positionsClient.getPositions()
+        dispatch(appActions.setPositions(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"))
+    } finally {
+        dispatch(appActions.setFetching(false))
+    }
+}
+
+export const deletePositions= (ids: number[]): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        await positionsClient.deletePositionsByIdIn(ids);
+        const data: Position[] = await positionsClient.getPositions()
+        dispatch(appActions.setPositions(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"));
+    } finally {
+        dispatch(appActions.setFetching(false));
+    }
+}
+
+export const createPositions = (params: Omit<Position, "id">): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        await positionsClient.addPosition(params);
+        const data: Position[] = await positionsClient.getPositions()
+        dispatch(appActions.setPositions(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"));
+    } finally {
+        dispatch(appActions.setFetching(false));
+    }
+}
+
+export const updatePositions = (params: Position): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        await positionsClient.updatePosition(params);
+        const data: Position[] = await positionsClient.getPositions()
+        dispatch(appActions.setPositions(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"));
+    } finally {
+        dispatch(appActions.setFetching(false));
     }
 }

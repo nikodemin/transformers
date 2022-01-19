@@ -11,13 +11,13 @@ import {appActions} from "../redux/action-creators";
 import {Bases} from "../pages/Bases/Bases";
 import {Upgrades} from "../pages/Upgrades";
 import {Weapons} from "../pages/Weapons";
-import {Transport} from "../pages/Transport";
+import {TransportComponent} from "../pages/TransportComponent";
 import {Inspections} from "../pages/Inspections";
 import {Operations} from "../pages/Operations";
 import {BattleFields} from "../pages/BattleFields";
-import {Energon} from "../pages/Energon";
-import {Equipment} from "../pages/Equipment";
-import {Injury} from "../pages/Injury";
+import {EnergonComponent} from "../pages/EnergonComponent";
+import {EquipmentComponent} from "../pages/EquipmentComponent";
+import {InjuryComponent} from "../pages/InjuryComponent";
 import {Modifications} from "../pages/Modifications";
 import {Positions} from "../pages/Positions";
 
@@ -44,7 +44,7 @@ export const App: FC = () => {
         },
         {
             path: Paths.TRANSPORT,
-            element: <Transport />,
+            element: <TransportComponent />,
         },
         {
             path: Paths.INSPECTIONS,
@@ -60,15 +60,15 @@ export const App: FC = () => {
         },
         {
             path: Paths.ENERGON,
-            element: <Energon />,
+            element: <EnergonComponent />,
         },
         {
             path: Paths.EQUIPMENT,
-            element: <Equipment />,
+            element: <EquipmentComponent />,
         },
         {
             path: Paths.INJURY,
-            element: <Injury />,
+            element: <InjuryComponent />,
         },
         {
             path: Paths.MODIFICATIONS,

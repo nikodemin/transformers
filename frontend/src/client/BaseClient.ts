@@ -66,7 +66,7 @@ export const energonClient = {
         return axiosInstance.post("/energon", data)
     },
     updateEnergon(data: Energon) {
-        return axiosInstance.put("/energon", data)
+        return axiosInstance.put(`/energon/${data.id}`, data)
     }
 }
 
@@ -108,7 +108,7 @@ export const equipmentClient = {
         return axiosInstance.post("/equipment", data)
     },
     updateEquipment(data: Equipment) {
-        return axiosInstance.put("/equipment", data)
+        return axiosInstance.put(`/equipment/${data.id}`, data)
     }
 }
 
@@ -129,7 +129,7 @@ export const injuryClient = {
         return axiosInstance.post("/injuries", data)
     },
     updateInjury(data: Injury) {
-        return axiosInstance.put("/injuries", data)
+        return axiosInstance.put(`/injuries/${data.id}`, data)
     }
 }
 
@@ -171,7 +171,7 @@ export const modificationsClient = {
         return axiosInstance.post("/modifications", data)
     },
     updateModification(data: Modification) {
-        return axiosInstance.put("/modifications", data)
+        return axiosInstance.put(`/modifications/${data.id}`, data)
     }
 }
 
@@ -192,7 +192,7 @@ export const operationsClient = {
         return axiosInstance.post("/operations", data)
     },
     updateOperation(data: Operation) {
-        return axiosInstance.put("/operations", data)
+        return axiosInstance.put(`/operations/${data.id}`, data)
     },
     addTransformerToOperation(data: { operationId: number, transformerId: number }) {
         return axiosInstance.post("/operations/addTransformer", data)
@@ -216,7 +216,7 @@ export const positionsClient = {
         return axiosInstance.post("/positions", data)
     },
     updatePosition(data: Position) {
-        return axiosInstance.put("/positions", data)
+        return axiosInstance.put(`/positions/${data.id}`, data)
     }
 }
 
@@ -237,7 +237,7 @@ export const transportClient = {
         return axiosInstance.post("/transports", data)
     },
     updateTransport(data: Transport) {
-        return axiosInstance.put("/transports", data)
+        return axiosInstance.put(`/transports/${data.id}`, data)
     },
     addTransportToOperation(data: { operationId: number, transportId: number }) {
         return axiosInstance.post("/transports/addOperation", data)
@@ -285,6 +285,6 @@ export const weaponsClient = {
         return axiosInstance.post("/weapons", data)
     },
     updateWeapon(data: Weapon) {
-        return axiosInstance.put("/weapons", data)
+        return axiosInstance.put(`/weapons/${data.id}`, data)
     }
 }

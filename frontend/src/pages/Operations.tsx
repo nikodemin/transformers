@@ -1,9 +1,13 @@
 import React, {FC, memo, useEffect, useState} from "react";
 import {useAppSelector} from "../redux/store";
-import {Form, Input, Modal, Table} from "antd";
-import {BattleField} from "../client/types";
-import {useDispatch} from "react-redux";
-import {createBattleField, deleteBattleFields, getOperations} from "../redux/thunk";
+import {DatePicker, Form, Input, Modal, Select, Table} from "antd";
+import {Operation} from "../client/types";
+import {batch, useDispatch} from "react-redux";
+import {
+    createOperation,
+    deleteOperations, getBattleFields,
+    getOperations, getTransport, updateOperation,
+} from "../redux/thunk";
 import {appActions} from "../redux/action-creators";
 import {ButtonsPanel} from "../components/buttonsPanel";
 import moment from "moment";
@@ -42,26 +46,28 @@ const columns = [
 
 export const Operations: FC = memo(() => {
     const {operations} = useAppSelector(state => state.app);
-    const [form] = Form.useForm();
-    const [field, setField] = useState<null | Partial<BattleField>>(null);
+    const [operation, setOperation] = useState<null | Partial<Operation>>(null);
     const [selectedFields, setSelectedFields] = useState<number[]>([])
     const dispatch = useDispatch();
 
-    const onCreate = () => setField({});
-    const onDeleteBases = () => {
+    const onCreate = () => setOperation({});
+    const onDeleteOperations = () => {
         if (selectedFields.length) {
-            dispatch(deleteBattleFields(selectedFields))
+            dispatch(deleteOperations(selectedFields))
         }
     }
-    const closeModal = () => setField(null);
-    const submit = (values: BattleField) => {
-        dispatch(createBattleField(values))
-    };
+    const closeModal = () => setOperation(null);
 
     useEffect(() => {
         dispatch(getOperations());
+        dispatch(getBattleFields());
+        dispatch(getTransport());
         return () => {
-            dispatch(appActions.setOperations(null));
+            batch(() => {
+                dispatch(appActions.setOperations(null));
+                dispatch(appActions.setBattleFields(null));
+                dispatch(appActions.setTransport(null));
+            })
         }
     }, [])
 
@@ -71,26 +77,8 @@ export const Operations: FC = memo(() => {
 
     return (
         <>
-            <ButtonsPanel createLabel={"Create operation"} onCreate={onCreate} onDelete={onDeleteBases} />
-            <Modal title='Base' visible={!!field} onCancel={closeModal} okText='Submit'
-                   onOk={() => {
-                       form
-                           .validateFields()
-                           .then(values => {
-                               form.resetFields();
-                               submit(values);
-                               closeModal();
-                           })
-                           .catch(info => {
-                               console.log("Validate Failed:", info);
-                           });
-                   }}>
-                <Form form={form}>
-                    <Form.Item label='Name' name='name'>
-                        <Input />
-                    </Form.Item>
-                </Form>
-            </Modal>
+            <ButtonsPanel createLabel={"Create operation"} onCreate={onCreate} onDelete={onDeleteOperations} />
+            {operation && <OperationModal operation={operation} closeModal={closeModal} />}
             <Table
                 rowSelection={{
                     type: "checkbox",
@@ -102,3 +90,55 @@ export const Operations: FC = memo(() => {
         </>
     );
 });
+
+const OperationModal: FC<{ closeModal: () => void; operation: Partial<Operation> }> = memo(({
+                                                                                                closeModal,
+                                                                                                operation
+                                                                                            }) => {
+    const [form] = Form.useForm();
+    const {battleFields} = useAppSelector(state => state.app);
+    const dispatch = useDispatch();
+    const submit = (values: Omit<Operation, "id">) => {
+        if (operation.id) {
+            dispatch(updateOperation({id: operation.id, ...values}))
+        } else {
+            dispatch(createOperation(values))
+        }
+    };
+    return (
+        <Modal title='Operation' visible={!!operation} onCancel={closeModal} okText='Submit'
+               onOk={() => {
+                   form
+                       .validateFields()
+                       .then(values => {
+                           form.resetFields();
+                           submit(values);
+                           closeModal();
+                       })
+                       .catch(info => {
+                           console.log("Validate Failed:", info);
+                       });
+               }}>
+            <Form form={form} initialValues={operation.id ? operation : undefined}>
+                <Form.Item label='Name' name='name' rules={[{required: true}]}>
+                    <Input />
+                </Form.Item>
+                <Form.Item label='Start date' name='startDate' rules={[{required: true}]}>
+                    <DatePicker />
+                </Form.Item>
+                <Form.Item label='End date' name='endDate' rules={[{required: true}]}>
+                    <DatePicker />
+                </Form.Item>
+                <Form.Item label='Enemy' name='enemy' rules={[{required: true}]}>
+                    <Input />
+                </Form.Item>
+                <Form.Item label='Battle field' name='battleFieldId' rules={[{required: true}]}>
+                    <Select>
+                        {battleFields && battleFields.map(battleField => <Select.Option key={battleField.id}
+                                                                                        value={battleField.id}>{battleField.name}</Select.Option>)}
+                    </Select>
+                </Form.Item>
+            </Form>
+        </Modal>
+    )
+})
