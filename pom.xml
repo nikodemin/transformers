@@ -66,6 +66,8 @@
                     <installDirectory>target</installDirectory>
                     <nodeVersion>v17.3.1</nodeVersion>
                     <npmVersion>8.3.0</npmVersion>
+                    <workingDirectory>frontend</workingDirectory>
+                    <installDirectory>target</installDirectory>
                 </configuration>
                 <executions>
                     <execution>
@@ -84,10 +86,55 @@
                         </configuration>
                     </execution>
                     <execution>
-                        <id>webpack build</id>
+                        <id>npm build</id>
                         <goals>
-                            <goal>webpack</goal>
+                            <goal>npm</goal>
                         </goals>
+                        <configuration>
+                            <arguments>run-script build</arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.0.2</version>
+                <executions>
+                    <execution>
+                        <id>copy-html</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/src/main/resources/templates</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>frontend/build</directory>
+                                    <include>**/*.html</include>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-static</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${basedir}/src/main/resources/static/static</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>frontend/build/static</directory>
+                                </resource>
+                                <resource>
+                                    <directory>frontend/build</directory>
+                                    <exclude>static/**</exclude>
+                                    <exclude>**/*.html</exclude>
+                                </resource>
+                            </resources>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
