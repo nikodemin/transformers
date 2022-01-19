@@ -5,7 +5,7 @@ import {useDispatch} from "react-redux";
 import {Modal, Form, DatePicker, Input, Select, InputNumber} from "antd";
 import {Transformer} from "../../client/types";
 import {appActions} from "../../redux/action-creators";
-import {ButtonsPannel} from "../../components/buttonsPanel";
+import {ButtonsPanel} from "../../components/buttonsPanel";
 
 export const Transformers: FC = memo(() => {
     const {transformers, bases} = useAppSelector(state => state.app)
@@ -34,8 +34,8 @@ export const Transformers: FC = memo(() => {
 
     return (
         <>
-            <ButtonsPannel createLabel={"Create transformer"} onCreate={handleCreateTransformer}
-                           onDelete={handleDeleteTransformers} />
+            <ButtonsPanel createLabel={"Create transformer"} onCreate={handleCreateTransformer}
+                          onDelete={handleDeleteTransformers} />
             <Modal title='Transformer' visible={!!editableTransformer} onCancel={closeModal} okText='Submit'
                    onOk={() => {
                        form

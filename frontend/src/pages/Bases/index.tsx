@@ -4,7 +4,7 @@ import {createBase, deleteBases, getBases} from "../../redux/thunk";
 import {appActions} from "../../redux/action-creators";
 import {useAppSelector} from "../../redux/store";
 import {Form, Input, InputNumber, Modal, Table} from "antd";
-import {ButtonsPannel} from "../../components/buttonsPanel";
+import {ButtonsPanel} from "../../components/buttonsPanel";
 import {Base, Location} from "../../client/types";
 
 const columns = [
@@ -54,7 +54,7 @@ export const Bases: FC = memo(() => {
 
     return (
         <>
-            <ButtonsPannel createLabel={"Create base"} onCreate={onCreate} onDelete={onDeleteBases} />
+            <ButtonsPanel createLabel={"Create base"} onCreate={onCreate} onDelete={onDeleteBases} />
             <Modal title='Base' visible={!!base} onCancel={closeModal} okText='Submit'
                    onOk={() => {
                        form

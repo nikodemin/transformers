@@ -7,14 +7,14 @@ interface Props {
     onDelete: () => void;
 }
 
-export const ButtonsPannel: FC<Props> = memo(({createLabel, onCreate, onDelete}) => {
+export const ButtonsPanel: FC<Props> = memo(({createLabel, onCreate, onDelete}) => {
     return (
-        <div style={{padding: "1rem"}}>
+        <div style={{padding: "1rem", margin: '0 -16px 1rem -16px', backgroundColor: '#001529'}}>
             <Space>
-                <Button type='primary' onClick={onCreate}>
+                <Button ghost type="primary" onClick={onCreate}>
                     {createLabel}
                 </Button>
-                <Button danger onClick={onDelete}>
+                <Button danger ghost onClick={onDelete}>
                     Delete selected
                 </Button>
             </Space>
