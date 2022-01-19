@@ -1,23 +1,38 @@
 import React, {FC, memo, useCallback, useEffect, useState} from "react";
 import {useAppSelector} from "../../redux/store";
-import {createTransformer, deleteTransformers, getBases, getTransformers} from "../../redux/thunk";
+import {createTransformer, deleteTransformers, getBases, getTransformers, updateTransformer} from "../../redux/thunk";
 import {useDispatch} from "react-redux";
-import {Modal, Form, DatePicker, Input, Select, InputNumber} from "antd";
+import {Modal, Form, DatePicker, Input, Select, InputNumber, Table} from "antd";
 import {Transformer} from "../../client/types";
 import {appActions} from "../../redux/action-creators";
 import {ButtonsPanel} from "../../components/buttonsPanel";
+import {TransTable} from "./TransTable";
 
+const transformerPosts = [
+    "GENERAL",
+    "ADMIRAL",
+    "LIEUTENANT",
+    "COLONEL",
+    "MAJOR"
+]
 export const Transformers: FC = memo(() => {
     const {transformers, bases} = useAppSelector(state => state.app)
     const dispatch = useDispatch();
     const [editableTransformer, setTransformer] = useState<null | Partial<Transformer>>(null);
     const [form] = Form.useForm();
+    const [selectedTrans, setSelectedTrans] = useState<number[]>([])
 
     const handleCreateTransformer = () => setTransformer({});
     const handleUpdate = useCallback((transformer: Transformer) => setTransformer(transformer), [setTransformer]);
     const closeModal = () => setTransformer(null);
-    const submit = (values: Transformer) => dispatch(createTransformer(values));
-    const handleDeleteTransformers = () => dispatch(deleteTransformers([]));
+    const submit = (values: Transformer) => {
+        if (editableTransformer?.id) {
+            dispatch(updateTransformer(values))
+        } else {
+            dispatch(createTransformer(values))
+        }
+    };
+    const handleDeleteTransformers = () => dispatch(deleteTransformers(selectedTrans));
 
     useEffect(() => {
         dispatch(getTransformers());
@@ -27,7 +42,7 @@ export const Transformers: FC = memo(() => {
             dispatch(appActions.setBases(null));
         }
     }, [])
-
+    console.log(editableTransformer)
     if (!transformers) {
         return null;
     }
@@ -49,28 +64,37 @@ export const Transformers: FC = memo(() => {
                                console.log("Validate Failed:", info);
                            });
                    }}>
-                <Form form={form}>
-                    <Form.Item label='Name' name='name'>
+                <Form form={form} initialValues={editableTransformer?.id ? editableTransformer : undefined}>
+                    <Form.Item label='Name' name='name' rules={[{required: true}]}>
                         <Input />
                     </Form.Item>
-                    <Form.Item label='Date of build' name='dateOfBuild'>
+                    <Form.Item label='Date of build' name='dateOfBuild' rules={[{required: true}]}>
                         <DatePicker />
                     </Form.Item>
-                    <Form.Item label='Select' name='baseId'>
+                    <Form.Item label='Date of hiring' name='hiringDate' rules={[{required: true}]}>
+                        <DatePicker />
+                    </Form.Item>
+                    <Form.Item label='Base' name='baseId' rules={[{required: true}]}>
                         <Select>
                             {bases && bases.map(base => <Select.Option key={base.id}
                                                                        value={base.id}>{base.name}</Select.Option>)}
                         </Select>
                     </Form.Item>
-                    <Form.Item label='Height' name='height'>
+                    <Form.Item label='Post' name='post' rules={[{required: true}]}>
+                        <Select>
+                            {transformerPosts.map(post => <Select.Option key={post}
+                                                                         value={post}>{post}</Select.Option>)}
+                        </Select>
+                    </Form.Item>
+                    <Form.Item label='Height' name='height' rules={[{required: true}]}>
                         <InputNumber />
                     </Form.Item>
-                    <Form.Item label='Weight' name='weight'>
+                    <Form.Item label='Weight' name='weight' rules={[{required: true}]}>
                         <InputNumber />
                     </Form.Item>
                 </Form>
             </Modal>
-            TRANS
+            <TransTable transformers={transformers} setSelectedTrans={setSelectedTrans} handleUpdate={handleUpdate} />
         </>
     );
 });

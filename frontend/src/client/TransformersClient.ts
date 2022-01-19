@@ -16,7 +16,7 @@ export const transformersClient = {
     deleteTransformersByIdIn(ids: number[]) {
         return axiosInstance.delete(baseUrl, {
             params: {
-                ids
+                ids: ids.join(",")
             }
         })
     },

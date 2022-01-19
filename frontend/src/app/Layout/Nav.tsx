@@ -47,6 +47,36 @@ export const Nav: FC = memo(() => {
                         Weapons
                     </Link>
                 </Menu.Item>
+                <Menu.Item key={Paths.OPERATIONS}>
+                    <Link to={Paths.OPERATIONS}>
+                        Operations
+                    </Link>
+                </Menu.Item>
+                <Menu.Item key={Paths.ENERGON}>
+                    <Link to={Paths.ENERGON}>
+                        Energon
+                    </Link>
+                </Menu.Item>
+                <Menu.Item key={Paths.EQUIPMENT}>
+                    <Link to={Paths.EQUIPMENT}>
+                        Equipment
+                    </Link>
+                </Menu.Item>
+                <Menu.Item key={Paths.INJURY}>
+                    <Link to={Paths.INJURY}>
+                        Injury
+                    </Link>
+                </Menu.Item>
+                <Menu.Item key={Paths.MODIFICATIONS}>
+                    <Link to={Paths.MODIFICATIONS}>
+                        Modifications
+                    </Link>
+                </Menu.Item>
+                <Menu.Item key={Paths.POSITIONS}>
+                    <Link to={Paths.POSITIONS}>
+                        Positions
+                    </Link>
+                </Menu.Item>
             </Menu>
         </Sider>
     );

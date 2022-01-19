@@ -7,6 +7,9 @@ export enum Paths {
     INSPECTIONS = "/inspections",
     OPERATIONS = "/operations",
     BATTLE_FIELDS = "/battleFields",
-
-
+    ENERGON = "/energon",
+    EQUIPMENT = "/equipment",
+    INJURY = "/injury",
+    MODIFICATIONS = "/modifications",
+    POSITIONS = "/positions",
 }
