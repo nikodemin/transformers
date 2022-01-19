@@ -1,0 +1,6 @@
+export enum ActionTypes {
+    SET_TRANSFORMERS = "SET_TRANSFORMERS",
+    SET_BASES = "SET_BASES",
+    SET_FETCHING = "SET_FETCHING",
+    SET_ERROR = "SET_ERROR",
+}
