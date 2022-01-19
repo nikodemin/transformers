@@ -2,15 +2,12 @@ import React, {FC, memo, useEffect, useState} from "react";
 import {useDispatch} from "react-redux";
 import {useAppSelector} from "../redux/store";
 import {
-    createBase,
     createBattleField,
-    deleteBases,
     deleteBattleFields,
-    getBases,
-    getBattleFields
+    getBattleFields, updateBattleField
 } from "../redux/thunk";
-import {Form, Input, InputNumber, Modal, Select, Table} from "antd";
-import {Base, BattleField, Location, Terrain} from "../client/types";
+import {Form, Input, Modal, Select, Table} from "antd";
+import {BattleField, Terrain} from "../client/types";
 import {appActions} from "../redux/action-creators";
 import {ButtonsPanel} from "../components/buttonsPanel";
 
@@ -38,7 +35,6 @@ const terrains = [
 
 export const BattleFields: FC = memo(() => {
     const {battleFields} = useAppSelector(state => state.app);
-    const [form] = Form.useForm();
     const [field, setField] = useState<null | Partial<BattleField>>(null);
     const [selectedFields, setSelectedFields] = useState<number[]>([])
     const dispatch = useDispatch();
@@ -50,9 +46,6 @@ export const BattleFields: FC = memo(() => {
         }
     }
     const closeModal = () => setField(null);
-    const submit = (values: BattleField) => {
-        dispatch(createBattleField(values))
-    };
 
     useEffect(() => {
         dispatch(getBattleFields());
@@ -68,32 +61,14 @@ export const BattleFields: FC = memo(() => {
     return (
         <>
             <ButtonsPanel createLabel={"Create battle field"} onCreate={onCreate} onDelete={onDeleteBases} />
-            <Modal title='Base' visible={!!field} onCancel={closeModal} okText='Submit'
-                   onOk={() => {
-                       form
-                           .validateFields()
-                           .then(values => {
-                               form.resetFields();
-                               submit(values);
-                               closeModal();
-                           })
-                           .catch(info => {
-                               console.log("Validate Failed:", info);
-                           });
-                   }}>
-                <Form form={form}>
-                    <Form.Item label='Name' name='name'>
-                        <Input />
-                    </Form.Item>
-                    <Form.Item label='Terrain' name='terrain'>
-                        <Select>
-                            {terrains.map(terrain => <Select.Option key={terrain}
-                                                                    value={terrain}>{terrain}</Select.Option>)}
-                        </Select>
-                    </Form.Item>
-                </Form>
-            </Modal>
+            {field && <FieldModal field={field} closeModal={closeModal} />}
             <Table
+                onRow={(record, rowIndex) => {
+                    const {id, name, terrain} = record;
+                    return {
+                        onClick: event => setField({id, name, terrain}), // click row
+                    };
+                }}
                 rowSelection={{
                     type: "checkbox",
                     onChange: ((selectedRowKeys, selectedRows) => setSelectedFields(selectedRows.map(row => row.id)))
@@ -104,3 +79,45 @@ export const BattleFields: FC = memo(() => {
         </>
     );
 });
+
+const FieldModal: FC<{ closeModal: () => void; field: Partial<BattleField> | null }> = memo(({
+                                                                                                 closeModal,
+                                                                                                 field,
+                                                                                             }) => {
+    const [form] = Form.useForm();
+    const dispatch = useDispatch();
+    const submit = (values: BattleField) => {
+        if (field?.id) {
+            dispatch(updateBattleField({...values, id: field.id}))
+        } else {
+            dispatch(createBattleField(values))
+        }
+    };
+    return (
+        <Modal title='Battle field' visible={!!field} onCancel={closeModal} okText='Submit'
+               onOk={() => {
+                   form
+                       .validateFields()
+                       .then(values => {
+                           form.resetFields();
+                           submit(values);
+                           closeModal();
+                       })
+                       .catch(info => {
+                           console.log("Validate Failed:", info);
+                       });
+               }}>
+            <Form form={form} initialValues={field?.id ? field : undefined}>
+                <Form.Item label='Name' name='name' rules={[{required: true}]}>
+                    <Input />
+                </Form.Item>
+                <Form.Item label='Terrain' name='terrain' rules={[{required: true}]}>
+                    <Select>
+                        {terrains.map(terrain => <Select.Option key={terrain}
+                                                                value={terrain}>{terrain}</Select.Option>)}
+                    </Select>
+                </Form.Item>
+            </Form>
+        </Modal>
+    )
+})

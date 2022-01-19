@@ -1,6 +1,6 @@
 import React, {FC, memo, useEffect, useState} from "react";
 import {useDispatch} from "react-redux";
-import {createBase, deleteBases, getBases} from "../../redux/thunk";
+import {createBase, deleteBases, getBases, updateBase} from "../../redux/thunk";
 import {appActions} from "../../redux/action-creators";
 import {useAppSelector} from "../../redux/store";
 import {Form, Input, InputNumber, Modal, Table} from "antd";
@@ -79,7 +79,11 @@ const BaseModal: FC<{ closeModal: () => void; base: Partial<Base> }> = memo(({cl
         longitude: number
     }) => {
         const {latitude, name, longitude} = values;
-        dispatch(createBase({name, location: {latitude, longitude}}))
+        if (base.id) {
+            dispatch(updateBase({id: base.id, name, location: {latitude, longitude}}))
+        } else {
+            dispatch(createBase({name, location: {latitude, longitude}}))
+        }
     };
     return (
         <Modal title='Base' visible={true} onCancel={closeModal} okText='Submit'

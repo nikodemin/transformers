@@ -45,7 +45,7 @@ export const baseClient = {
         return axiosInstance.post(baseUrl, base)
     },
     updateBase(base: Base) {
-        return axiosInstance.put(baseUrl, base)
+        return axiosInstance.put(`${baseUrl}/${base.id}`, base)
     }
 }
 
@@ -87,7 +87,7 @@ export const battleFieldsClient = {
         return axiosInstance.post("/battleFields", data)
     },
     updateField(data: BattleField) {
-        return axiosInstance.put("/battleFields", data)
+        return axiosInstance.put(`/battleFields/${data.id}`, data)
     }
 }
 
