@@ -1,9 +1,13 @@
 import React, {FC, memo, useEffect, useState} from "react";
 import {useAppSelector} from "../redux/store";
-import {DatePicker, Form, Input, Modal, Table} from "antd";
-import {Inspection, Upgrade} from "../client/types";
+import {DatePicker, Form, Input, Modal, Select, Table} from "antd";
+import {Inspection} from "../client/types";
 import {useDispatch} from "react-redux";
-import {createUpgrade, getInspections} from "../redux/thunk";
+import {
+    createInspection, deleteInspections,
+    getInspections, getTransformers, getTransport,
+    updateInspection
+} from "../redux/thunk";
 import {appActions} from "../redux/action-creators";
 import {ButtonsPanel} from "../components/buttonsPanel";
 import moment from "moment";
@@ -34,7 +38,6 @@ const columns = [
 ];
 export const Inspections: FC = memo(() => {
     const {inspections} = useAppSelector(state => state.app);
-    const [form] = Form.useForm();
     const [inspection, setInspection] = useState<null | Partial<Inspection>>(null);
     const [selectedInspections, setSelectedInspections] = useState<number[]>([])
     const dispatch = useDispatch();
@@ -42,18 +45,19 @@ export const Inspections: FC = memo(() => {
     const onCreate = () => setInspection({});
     const onDeleteUpgrades = () => {
         if (selectedInspections.length) {
-            //dispatch(deleteUpgrades(selectedUpgrades))
+            dispatch(deleteInspections(selectedInspections))
         }
     }
     const closeModal = () => setInspection(null);
-    const submit = (values: Upgrade) => {
-        dispatch(createUpgrade(values))
-    };
 
     useEffect(() => {
         dispatch(getInspections())
+        dispatch(getTransformers())
+        dispatch(getTransport())
         return () => {
             dispatch(appActions.setInspections(null));
+            dispatch(appActions.setTransformers(null));
+            dispatch(appActions.setTransport(null));
         }
     }, [])
 
@@ -64,32 +68,16 @@ export const Inspections: FC = memo(() => {
     return (
         <>
             <ButtonsPanel createLabel={"Create inspection"} onCreate={onCreate} onDelete={onDeleteUpgrades} />
-            <Modal title='Base' visible={!!inspection} onCancel={closeModal} okText='Submit'
-                   onOk={() => {
-                       form
-                           .validateFields()
-                           .then(values => {
-                               form.resetFields();
-                               submit(values);
-                               closeModal();
-                           })
-                           .catch(info => {
-                               console.log("Validate Failed:", info);
-                           });
-                   }}>
-                <Form form={form}>
-                    <Form.Item label='Name' name='name' rules={[{required: true}]}>
-                        <Input />
-                    </Form.Item>
-                    <Form.Item label='Date' name='date' rules={[{required: true}]}>
-                        <DatePicker />
-                    </Form.Item>
-                    <Form.Item label='Check Date' name='checkDate' rules={[{required: true}]}>
-                        <DatePicker />
-                    </Form.Item>
-                </Form>
-            </Modal>
+            {inspection && <InspectionModal inspection={inspection} closeModal={closeModal} />}
             <Table
+                onRow={(record, rowIndex) => {
+                    const {id, transformerId, description, transportId} = record;
+                    return {
+                        onClick: event => setInspection({
+                            id, transformerId, description, serviceDate: moment(record.serviceDate), transportId
+                        }), // click row
+                    };
+                }}
                 rowSelection={{
                     type: "checkbox",
                     onChange: ((selectedRowKeys, selectedRows) => setSelectedInspections(selectedRows.map(row => row.id)))
@@ -100,3 +88,55 @@ export const Inspections: FC = memo(() => {
         </>
     );
 });
+
+const InspectionModal: FC<{ closeModal: () => void; inspection: Partial<Inspection> }> = memo(({
+                                                                                                   closeModal,
+                                                                                                   inspection
+                                                                                               }) => {
+    const {transformers, transport} = useAppSelector(state => state.app);
+    const [form] = Form.useForm();
+    const dispatch = useDispatch();
+    const submit = (values: Inspection) => {
+        if (inspection.id) {
+            dispatch(updateInspection({...values, id: inspection.id}))
+        } else {
+            dispatch(createInspection(values))
+        }
+    };
+    return (
+        <Modal title='Base' visible={!!inspection} onCancel={closeModal} okText='Submit'
+               onOk={() => {
+                   form
+                       .validateFields()
+                       .then(values => {
+                           form.resetFields();
+                           submit(values);
+                           closeModal();
+                       })
+                       .catch(info => {
+                           console.log("Validate Failed:", info);
+                       });
+               }}>
+            <Form form={form} initialValues={inspection.id ? inspection : undefined}>
+                <Form.Item label='Description' name='description' rules={[{required: true}]}>
+                    <Input />
+                </Form.Item>
+                <Form.Item label='Service Date' name='serviceDate' rules={[{required: true}]}>
+                    <DatePicker />
+                </Form.Item>
+                <Form.Item label='Transformer' name='transformerId' rules={[{required: true}]}>
+                    <Select>
+                        {transformers && transformers.map(transformer => <Select.Option key={transformer.id}
+                                                                                        value={transformer.id}>{transformer.name}</Select.Option>)}
+                    </Select>
+                </Form.Item>
+                <Form.Item label='Transport' name='transportId' rules={[{required: true}]}>
+                    <Select>
+                        {transport && transport.map(transportItem => <Select.Option key={transportItem.id}
+                                                                                    value={transportItem.id}>{transportItem.name}</Select.Option>)}
+                    </Select>
+                </Form.Item>
+            </Form>
+        </Modal>
+    )
+})

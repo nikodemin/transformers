@@ -75,7 +75,7 @@ export interface Injury {
 
 export interface Inspection {
     id: number
-    serviceDate: string | Date
+    serviceDate: string | Date | moment.Moment
     description: string
     transformerId: number
     transportId: number

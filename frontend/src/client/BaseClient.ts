@@ -150,7 +150,7 @@ export const inspectionsClient = {
         return axiosInstance.post("/inspections", data)
     },
     updateInspection(data: Inspection) {
-        return axiosInstance.put("/inspections", data)
+        return axiosInstance.put(`/inspections/${data.id}`, data)
     }
 }
 

@@ -1,12 +1,12 @@
 import {AppThunk} from "./store";
 import {appActions} from "./action-creators";
 import {transformersClient} from "../client/TransformersClient";
-import {Base, BattleField, Inspection, Modification, Operation, Transformer, Upgrade} from "../client/types";
+import {Base, BattleField, Inspection, Modification, Operation, Transformer, Transport, Upgrade} from "../client/types";
 import {
     baseClient,
     battleFieldsClient,
     inspectionsClient,
-    modificationsClient, operationsClient,
+    modificationsClient, operationsClient, transportClient,
     upgradesClient
 } from "../client/BaseClient";
 
@@ -188,20 +188,7 @@ export const createUpgrade = (params: Omit<Upgrade, "id" | "modifications">): Ap
     }
 }
 
-export const updateUpgrade = (params: Upgrade): AppThunk => async dispatch => {
-    dispatch(appActions.setFetching(true));
-    try {
-        await upgradesClient.updateUpgrade(params);
-        const data: Upgrade[] = await upgradesClient.getUpgrades()
-        dispatch(appActions.setUpgrades(data))
-    } catch (e) {
-        dispatch(appActions.setError("Some error has occurred!"));
-    } finally {
-        dispatch(appActions.setFetching(false));
-    }
-}
-
-export const addModificationToUpgrade = (params: {upgradeId: number, modificationId: number}): AppThunk => async dispatch => {
+export const addModificationToUpgrade = (params: { upgradeId: number, modificationId: number }): AppThunk => async dispatch => {
     dispatch(appActions.setFetching(true));
     try {
         await upgradesClient.addModificationToUpgrade(params);
@@ -236,6 +223,45 @@ export const getModifications = (): AppThunk => async dispatch => {
         dispatch(appActions.setError("Some error has occurred!"))
     } finally {
         dispatch(appActions.setFetching(false))
+    }
+}
+
+export const createInspection = (params: Omit<Inspection, "id">): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        await inspectionsClient.addInspection(params);
+        const data: Inspection[] = await inspectionsClient.getInspections()
+        dispatch(appActions.setInspections(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"));
+    } finally {
+        dispatch(appActions.setFetching(false));
+    }
+}
+
+export const updateInspection = (params: Inspection): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        await inspectionsClient.updateInspection(params);
+        const data: Inspection[] = await inspectionsClient.getInspections()
+        dispatch(appActions.setInspections(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"));
+    } finally {
+        dispatch(appActions.setFetching(false));
+    }
+}
+
+export const deleteInspections = (ids: number[]): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        await inspectionsClient.deleteInspectionsByIdIn(ids);
+        const data: Inspection[] = await inspectionsClient.getInspections()
+        dispatch(appActions.setInspections(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"));
+    } finally {
+        dispatch(appActions.setFetching(false));
     }
 }
 
@@ -295,6 +321,18 @@ export const getOperations = (): AppThunk => async dispatch => {
     try {
         const data: Operation[] = await operationsClient.getOperations()
         dispatch(appActions.setOperations(data))
+    } catch (e) {
+        dispatch(appActions.setError("Some error has occurred!"))
+    } finally {
+        dispatch(appActions.setFetching(false))
+    }
+}
+
+export const getTransport = (): AppThunk => async dispatch => {
+    dispatch(appActions.setFetching(true));
+    try {
+        const data: Transport[] = await transportClient.getTransport()
+        dispatch(appActions.setTransport(data))
     } catch (e) {
         dispatch(appActions.setError("Some error has occurred!"))
     } finally {
