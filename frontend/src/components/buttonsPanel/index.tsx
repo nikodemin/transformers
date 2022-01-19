@@ -9,7 +9,7 @@ interface Props {
 
 export const ButtonsPanel: FC<Props> = memo(({createLabel, onCreate, onDelete}) => {
     return (
-        <div style={{padding: "1rem", margin: '0 -16px 1rem -16px', backgroundColor: '#001529'}}>
+        <div style={{padding: "1rem", margin: '0 -16px 1rem -16px', backgroundColor: '#001529', zIndex: 5}}>
             <Space>
                 <Button ghost type="primary" onClick={onCreate}>
                     {createLabel}

@@ -9,7 +9,7 @@ export const Nav: FC = memo(() => {
     const location = useLocation();
 
     return (
-        <Sider>
+        <Sider style={{zIndex: 5}}>
             <div className='logo' />
             <Menu theme='dark' defaultSelectedKeys={[location.pathname]} mode='inline'>
                 <Menu.Item key={Paths.TRANSFORMERS}>
