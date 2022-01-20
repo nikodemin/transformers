@@ -18,7 +18,7 @@ spring:
       ddl-auto: validate
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQL10Dialect
-  flyway:
+  liquibase:
     enabled: true
     url: jdbc:postgresql://localhost:5432/postgres
     user: postgres

@@ -21,8 +21,8 @@ public class Transformer extends AbstractEntity {
     @Enumerated(value = EnumType.STRING)
     private TransformerPost post;
     private Instant hiringDate;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Base base;
+    @JoinColumn(table = "base", name = "id")
+    private Long baseId;
     @ManyToMany(mappedBy = "transformers")
     private List<Operation> operations;
 }

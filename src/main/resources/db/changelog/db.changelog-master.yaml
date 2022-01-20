@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - include:
+      file: db/migration/V1__create_tables.sql
+  - include:
+      file: db/migration/V2__add_triggers.sql
+  - include:
+      file: db/migration/V3__add_data.sql
+  - include:
+      file: db/migration/V4__trigger_and_indexes.sql
