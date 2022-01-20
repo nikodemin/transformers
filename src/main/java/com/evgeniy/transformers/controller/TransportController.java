@@ -16,13 +16,13 @@ public class TransportController {
     private final TransportRepo repo;
 
     @DeleteMapping("/transports")
-    public ResponseEntity<Void> deleteByIds(@RequestParam List<Long> ids) {
+    public ResponseEntity<Void> deleteByIds(@RequestParam List<Integer> ids) {
         repo.deleteByIdIn(ids);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/transports/addOperation")
-    public ResponseEntity<Void> addTransformer(@RequestParam Long operationId, @RequestParam Long transportId) {
+    public ResponseEntity<Void> addTransformer(@RequestParam Integer operationId, @RequestParam Integer transportId) {
         repo.addOperation(transportId, operationId);
         return ResponseEntity.ok().build();
     }

@@ -22,7 +22,7 @@ public class Transformer extends AbstractEntity {
     private TransformerPost post;
     private Instant hiringDate;
     @JoinColumn(table = "base", name = "id")
-    private Long baseId;
+    private Integer baseId;
     @ManyToMany(mappedBy = "transformers")
     private List<Operation> operations;
 }

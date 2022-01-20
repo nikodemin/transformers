@@ -17,5 +17,5 @@ public class Injury extends AbstractEntity {
     private String description;
     private Instant date;
     @JoinColumn(table = "transformer", name = "id")
-    private Long transformerId;
+    private Integer transformerId;
 }

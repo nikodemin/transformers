@@ -17,7 +17,7 @@ public class Inspection extends AbstractEntity {
     private Instant serviceDate;
     private String description;
     @JoinColumn(table = "transformer", name = "id")
-    private Long transformerId;
+    private Integer transformerId;
     @JoinColumn(table = "transport", name = "id")
-    private Long transportId;
+    private Integer transportId;
 }

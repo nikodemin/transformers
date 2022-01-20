@@ -15,7 +15,7 @@ public class EnergonController {
     private final EnergonRepo repo;
 
     @DeleteMapping("/energon")
-    public ResponseEntity<Void> deleteByIds(@RequestParam List<Long> ids) {
+    public ResponseEntity<Void> deleteByIds(@RequestParam List<Integer> ids) {
         repo.deleteByIdIn(ids);
         return ResponseEntity.ok().build();
     }

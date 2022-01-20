@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @RepositoryRestResource(collectionResourceRel = "energon", path = "energon")
-public interface EnergonRepo extends PagingAndSortingRepository<Energon, Long> {
+public interface EnergonRepo extends PagingAndSortingRepository<Energon, Integer> {
     @Transactional
     @RestResource(exported = false)
-    void deleteByIdIn(List<Long> ids);
+    void deleteByIdIn(List<Integer> ids);
 }

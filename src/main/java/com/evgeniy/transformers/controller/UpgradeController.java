@@ -16,13 +16,13 @@ public class UpgradeController {
     private final UpgradeRepo repo;
 
     @DeleteMapping("/upgrades")
-    public ResponseEntity<Void> deleteByIds(@RequestParam List<Long> ids) {
+    public ResponseEntity<Void> deleteByIds(@RequestParam List<Integer> ids) {
         repo.deleteByIdIn(ids);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/upgrades/addModification")
-    public ResponseEntity<Void> addTransformer(@RequestParam Long upgradeId, @RequestParam Long modificationId) {
+    public ResponseEntity<Void> addTransformer(@RequestParam Integer upgradeId, @RequestParam Integer modificationId) {
         repo.addModification(upgradeId, modificationId);
         return ResponseEntity.ok().build();
     }

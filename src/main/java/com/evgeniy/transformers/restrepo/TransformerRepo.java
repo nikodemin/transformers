@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.Optional;
 
 @RepositoryRestResource(collectionResourceRel = "transformers", path = "transformers")
-public interface TransformerRepo extends PagingAndSortingRepository<Transformer, Long> {
-    Optional<Transformer> findByBaseId(Long baseId);
+public interface TransformerRepo extends PagingAndSortingRepository<Transformer, Integer> {
+    Optional<Transformer> findByBaseId(Integer baseId);
 
     @Transactional
     @RestResource(exported = false)
-    void deleteByIdIn(List<Long> ids);
+    void deleteByIdIn(List<Integer> ids);
 }

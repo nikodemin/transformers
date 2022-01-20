@@ -23,7 +23,7 @@ public class Operation extends AbstractEntity {
     private String enemy;
 
     @JoinColumn(table = "battle_field", name = "id")
-    private Long battleFieldId;
+    private Integer battleFieldId;
 
     @ManyToMany
     @JoinTable(

@@ -19,5 +19,5 @@ public class Equipment extends AbstractEntity {
     private Integer quantity;
     private Instant takeDate;
     @JoinColumn(table = "position", name = "id")
-    private Long positionId;
+    private Integer positionId;
 }

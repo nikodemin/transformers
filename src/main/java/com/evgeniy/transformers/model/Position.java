@@ -20,11 +20,11 @@ public class Position extends AbstractEntity {
     @Enumerated(value = EnumType.STRING)
     private Squad squad;
     @JoinColumn(table = "energon", name = "id")
-    private Long energonId;
+    private Integer energonId;
     @JoinColumn(table = "battle_field", name = "id")
-    private Long battleFieldId;
+    private Integer battleFieldId;
     @JoinColumn(table = "transformer_id", name = "id")
-    private Long transformerId;
+    private Integer transformerId;
     @JoinColumn(table = "weapon", name = "id")
-    private Long weaponId;
+    private Integer weaponId;
 }

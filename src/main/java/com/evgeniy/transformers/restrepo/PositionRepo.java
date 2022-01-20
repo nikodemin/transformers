@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @RepositoryRestResource(collectionResourceRel = "positions", path = "positions")
-public interface PositionRepo extends PagingAndSortingRepository<Position, Long> {
+public interface PositionRepo extends PagingAndSortingRepository<Position, Integer> {
     @Transactional
     @RestResource(exported = false)
-    void deleteByIdIn(List<Long> ids);
+    void deleteByIdIn(List<Integer> ids);
 }

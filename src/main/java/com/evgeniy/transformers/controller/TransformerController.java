@@ -15,7 +15,7 @@ public class TransformerController {
     private final TransformerRepo repo;
 
     @DeleteMapping("/transformers")
-    public ResponseEntity<Void> deleteByIds(@RequestParam List<Long> ids) {
+    public ResponseEntity<Void> deleteByIds(@RequestParam List<Integer> ids) {
         repo.deleteByIdIn(ids);
         return ResponseEntity.ok().build();
     }

@@ -20,7 +20,7 @@ public class Upgrade extends AbstractEntity {
     private Instant date;
     private Instant checkDate;
     @JoinColumn(table = "transformer", name = "id")
-    private Long transformerId;
+    private Integer transformerId;
     @ManyToMany
     @JoinTable(
             name = "upgrade_modification",

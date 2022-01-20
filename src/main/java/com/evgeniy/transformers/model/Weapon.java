@@ -17,5 +17,4 @@ public class Weapon extends AbstractEntity {
     private String caliber;
     private Integer rateOfFire;
     private Integer rangeOfFire;
-    //todo add many to many relationships in every table
 }

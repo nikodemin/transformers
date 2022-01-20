@@ -12,13 +12,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @RepositoryRestResource(collectionResourceRel = "operations", path = "operations")
-public interface OperationRepo extends PagingAndSortingRepository<Operation, Long> {
+public interface OperationRepo extends PagingAndSortingRepository<Operation, Integer> {
     @Transactional
     @RestResource(exported = false)
-    void deleteByIdIn(List<Long> ids);
+    void deleteByIdIn(List<Integer> ids);
 
     @Modifying
     @Transactional
     @Query(nativeQuery = true, value = "INSERT INTO operation_transformer (operation_id, transformer_id) VALUES (:operation_id, :transformer_id)")
-    void addTransformer(@Param("operation_id") Long operationId, @Param("transformer_id") Long transformerId);
+    void addTransformer(@Param("operation_id") Integer operationId, @Param("transformer_id") Integer transformerId);
 }

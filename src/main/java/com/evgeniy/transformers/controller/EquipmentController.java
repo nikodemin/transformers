@@ -15,7 +15,7 @@ public class EquipmentController {
     private final EquipmentRepo repo;
 
     @DeleteMapping("/equipment")
-    public ResponseEntity<Void> deleteByIds(@RequestParam List<Long> ids) {
+    public ResponseEntity<Void> deleteByIds(@RequestParam List<Integer> ids) {
         repo.deleteByIdIn(ids);
         return ResponseEntity.ok().build();
     }
